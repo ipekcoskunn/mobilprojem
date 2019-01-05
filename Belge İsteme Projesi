@@ -20,3 +20,122 @@
   <button ion-button full (click)="onClick()">Giris Yap</button>
 
 </ion-content>
+
+import { Component } from '@angular/core';
+import { ListPage } from '../list/list';
+import { NavController, NavParams } from 'ionic-angular';
+@Component({
+  selector: 'page-hello-ionic',
+  templateUrl: 'hello-ionic.html'
+})
+export class HelloIonicPage {
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+
+  }
+  onClick() {
+    this.navCtrl.push(ListPage);
+  }
+}
+
+<ion-header>
+  <ion-navbar>
+    <button menuToggle *ngIf="!selectedItem">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title></ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <h3 text-center *ngIf="selectedItem">
+    <ion-icon [name]="selectedItem.icon"></ion-icon>
+  </h3>
+  <h4 text-center *ngIf="selectedItem">
+    <b>{{selectedItem.title}}</b> isteğiniz iletilmiştir.
+  </h4>
+</ion-content>
+
+import { Component } from '@angular/core';
+
+import { NavController, NavParams } from 'ionic-angular';
+
+
+@Component({
+  selector: 'page-item-details',
+  templateUrl: 'item-details.html'
+})
+export class ItemDetailsPage {
+  selectedItem: any;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    // If we navigated to this page, we will have an item available as a nav param
+    this.selectedItem = navParams.get('item');
+  }
+}
+
+
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Belge İsteği</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
+      <ion-icon name="{{item.icon}}" item-left></ion-icon>
+      {{item.title}}
+      <div class="item-note" item-right>
+        {{item.note}}
+      </div>
+    </button>
+  </ion-list>
+</ion-content>
+
+import { Component } from '@angular/core';
+
+import { NavController, NavParams } from 'ionic-angular';
+
+import { ItemDetailsPage } from '../item-details/item-details';
+
+@Component({
+  selector: 'page-list',
+  templateUrl: 'list.html'
+})
+export class ListPage {
+  icons: string[];
+  items: Array<{title: string, note: string, icon: string}>;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.icons = ['attach', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
+    'american-football', 'boat', 'bluetooth', 'build'];
+
+    this.items = [];
+    this.items.push({
+        title: 'Öğrenci Belgesi',
+        icon: this.icons[0]
+    });
+    this.items.push({
+        title: 'Transkript',
+        icon: this.icons[0]
+    });
+    this.items.push({
+        title: 'Harç Belgesi',
+        icon: this.icons[0]
+    });
+    this.items.push({
+        title: 'Geçici Mezuniyet Belgesi',
+        icon: this.icons[0]
+    });
+  }
+
+  itemTapped(event, item) {
+    this.navCtrl.push(ItemDetailsPage, {
+      item: item
+    });
+  }
+}
+
